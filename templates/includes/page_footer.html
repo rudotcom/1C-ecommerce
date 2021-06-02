@@ -1,0 +1,67 @@
+ {% load static %}
+ <footer class="footer">
+      <div class="tm-black-bg">
+        <div class="container">
+          <div class="row margin-bottom-60">
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-menu">
+                        <h2 class="footer-wid-title">Покупателю </h2>
+                        <nav class="tm-footer-nav tm-footer-div">
+                        <ul>
+{% include 'article_menu.html' %}
+                            <li><a href="{% url 'profile' %}#orders">Мои заказы</a></li>
+                            <li><a href="{% url 'cart' %}">Моя корзина</a></li>
+                        </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-about-us">
+                        <h2>Электр<span>{они/ка}</span></h2>
+                        <p>Крупнейший магазин электротоваров и радиоэлектронных компонентов нашего города.</p>
+                        <a href="http://as-electrica.ru/">AS-Electrica.ru</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-about-us">
+                        <h2>Магазины</h2>
+                        <p>"Электрика"</p>
+                        <p>"Электрон"</p>
+                        <p>Время работы:</p>
+                        <p>Пн.-Пт.: 08:00-18:00</p>
+                        <p>Сб.-Вс.: 09:00-17:00</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-about-us">
+                        <h2>Телефоны</h2>
+                        <p>(8-384-53) 6-31-70</p>
+                        <p>(8-384-53) 6-34-19</p>
+                        <p>(8-384-53) 6-42-69</p>
+                        <p>(8-384-53) 6-18-94</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> <!-- End footer top area -->
+ </footer>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/60b54f3d6699c7280da9f3d4/1f723r2gq';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+ </body>
+</html>

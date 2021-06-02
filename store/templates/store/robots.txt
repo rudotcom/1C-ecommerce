@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /store/add-to-cart/
+Disallow: /store/cart/

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+                  {% block breadcrumbs %}
+                <li class="breadcrumb-item active" aria-current="page">{{ object.title }}</li>
+                  {% endblock %}
+
+{% block content %}
+    <h3 class="text-center">{{ object.title }}</h3>
+<div class="control-form">
+   {{ object.content|safe }}
+</div>
+{% endblock content %}

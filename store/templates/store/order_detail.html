@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+                  {% block breadcrumbs %}
+                <li class="breadcrumb-item"><a href="{% url 'profile' %}">Личный кабинет</a></li>
+                <li class="breadcrumb-item active">Заказ № {{ order_detail.id }}</li>
+                  {% endblock %}
+{% block content %}
+
+<div class="col-md-12" style="margin-top: 50px; margin-bottom: 150px">
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Детали заказа № {{ order_detail.id }}</h5>
+          </div>
+          <div class="modal-body">
+              <table class="table-product-list">
+                  <thead>
+                  <tr>
+                      <th scope="col" colspan="2"></th>
+                      <th>Цена</th>
+                      <th>Кол-во</th>
+                      <th>Итого</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for item in order_detail.products.all %}
+                    <tr>
+                        <td>{{ item.product.title }}</td>
+                        <td class="w-25">{{ item.product.image_thumb }}</td>
+                        <td><strong>{{ item.product.price }} &#x20bd;</strong></td>
+                        <td align="center">{{ item.qty }}</td>
+                        <td>{{ item.final_price }} &#x20bd;</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>Итого:</td>
+                        <td align="center">{{ order_detail.total_products }}</td>
+                        <td><strong>{{ order_detail.total_price_net }} &#x20bd;</strong></td>
+                    </tr>
+                  </tfoot>
+              </table>
+              <hr>
+
+<div class="order_body">
+{% if order_detail.first_name or order_detail.last_name %}<div><div class="order-label">Покупатель:</div><div class="order-data">{{ order_detail.first_name }}&nbsp;{{ order_detail.last_name }}&nbsp;{{ order_detail.patronymic }}</div></div>{% endif %}
+{% if order_detail.phone %}<div><div class="order-label">Телефон:</div><div class="order-data">{{ order_detail.phone }}</div></div>{% endif %}
+{% if order_detail.comment %}<div><div class="order-label">Комментарий:</div><div class="order-data">{{ order_detail.comment }}</div></div>{% endif %}
+<div><div class="order-label">Статус</div><div class="order-data">{{ order_detail.get_status_display }}</div></div>
+</div>
+    <p>Детали: как получить заказ</p>
+          </div>
+        </div>
+</div>
+
+{% endblock %}

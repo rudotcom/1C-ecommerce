@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load l10n %}
+
+{% load crispy_forms_tags %}
+
+                  {% block breadcrumbs %}
+                <li class="breadcrumb-item active">Корзина</li>
+                  {% endblock %}
+{% block content %}
+<h4 class="text-center">Ваша корзина {% if not cart.products.count %}пуста{% endif %}</h4>
+
+    {% if cart.products.count %}
+<table class="table-product-list">
+  <thead>
+    <tr>
+      <th colspan="2"></th>
+      <th scope="col">Цена</th>
+      <th scope="col">Кол-во</th>
+      <th scope="col">Общая цена</th>
+      <th scope="col">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in cart.products.all %}
+        <tr>
+          <td scope="row">{{ item.product.title }}</td>
+          <td><div class="tm-product-thumbnails">{{ item.product.image_thumb }}</div></td>
+          <td>
+          {%  if item.product.price_discount  %}
+              <strike>{{ item.product.price|localize }}&#x20bd;</strike><br>
+              {{ item.product.price_discount|localize }}&#x20bd;
+          {% else %}
+              {{ item.product.price|localize }}&#x20bd;
+          {% endif %}
+          </td>
+          <td>
+            <form action="{% url 'change_qty' pk=item.product.pk %}" method="POST">
+              {% csrf_token %}
+              <input type="number" class="form-control" name="qty" style="width: 70px;" min="0" value="{{ item.qty }}" onchange="this.form.submit()">
+            </form>
+          </td>
+            <td>{{ item.final_price|localize }} &#x20bd;</td>
+          <td>
+            <a href="{% url 'delete_from_cart' pk=item.product.pk %}" title="Удалить"><button class="btn btn-light"><i class="fa fa-trash-o" aria-hidden="true"></i></button></a>
+          </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+          <td>Всего товаров:</td>
+          <td>{{ cart.total_products }}</td>
+          <td><strong>{{ cart.total_price_net|localize }} &#x20bd;</strong></td>
+          <td>&nbsp;</td>
+        </tr>
+    </tfoot>
+</table>
+    <div class="control-form">
+        {% if not request.user.is_authenticated %}
+        <p>Для оформления заказа:
+          <a href="{% url 'login' %}"><button class="btn btn-generic">Войти</button></a>
+            или
+          <a href="{% url 'registration' %}"><button class="btn btn-danger">Зарегистрироваться</button></a>
+        {% else %}
+      <form action="{% url 'checkout' %}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-generic btn-block" value="Оформить заказ">
+      </form>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+
+{% endblock content %}

@@ -1,0 +1,9 @@
+ {% load static %}
+           <div class="tm-group">
+                <div>
+                    <a href="{% url 'category_detail' pk=category.pk %}"><img class="tm-group-image" src="{{ category.image_name }}" alt="{{ category.name }}"></a>
+                </div>
+                <div class="tag-container title-tag">
+                    <a href="{% url 'category_detail' pk=category.pk %}">{{ category.name }}</a>
+                </div>
+            </div>

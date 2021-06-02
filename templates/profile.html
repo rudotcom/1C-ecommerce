@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+                  {% block breadcrumbs %}
+                <li class="breadcrumb-item active">Профиль</li>
+                  {% endblock %}
+{% block content %}
+<h3 class="text-center">Заказы клиента {{ request.user.username }}</h3>
+
+{% if not orders.count %}
+ <div class="control-form">
+   <div class="col-md-12" style="margin-top: 50px; margin-bottom: 150px">
+        <h5>У вас еще нет оформленных заказов. <a href="{% url 'group_list' %}">Посмотрите наши товары</a></h5>
+    </div>
+ </div>
+{% else %}
+
+    <table class="table-product-list">
+        <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Товаров</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td scope="row">
+                    {{ order.id }}
+                </td>
+                <td scope="row">{{ order.created_at }}</td>
+                <td>{{ order.get_status_display }}</td>
+                <td>{{ order.total_products }}</td>
+                <td>{{ order.total_price_net }}</td>
+                <td><a href="{% url 'order' pk=order.id %}" data-toggle="modal" data-target="#Modal-{{ order.id }}">Подробнее</a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="Modal-{{ order.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Детали заказа № {{ order.id }}</h5>
+                          </div>
+                          <div class="modal-body">
+                              <table class="table-product-list">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col" colspan="2"></th>
+                                      <th>Цена</th>
+                                      <th>Кол-во</th>
+                                      <th>Итого</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  {% for item in order.products.all %}
+                                    <tr>
+                                        <td>{{ item.product.title }}</td>
+                                        <td class="w-25">{{ item.product.image_thumb }}</td>
+                                        <td>{{ item.product.price }} &#x20bd;</td>
+                                        <td>{{ item.qty }}</td>
+                                        <td>{{ item.final_price }} &#x20bd;</td>
+                                    </tr>
+                                  {% endfor %}
+                                   </tbody>
+                                  <tfoot>
+                                   <tr>
+                                        <td colspan="2">
+
+                                        </td>
+                                        <td>Итого:</td>
+                                        <td>{{ order.total_products }}</td>
+                                        <td><strong>{{ order.total_price_net }} &#x20bd;</strong></td>
+                                    </tr>
+                                  </tfoot>
+                              </table>
+                              <hr>
+<div class="order_body">
+{% if order.first_name or order.last_name %}<div><div class="order-label">Покупатель:</div><div class="order-data">{{ order.first_name }}&nbsp;{{ order.last_name }}&nbsp;{{ order.patronymic }}</div></div>{% endif %}
+{% if order.phone %}<div><div class="order-label">Телефон:</div><div class="order-data">{{ order.phone }}</div></div>{% endif %}
+{% if order.comment %}<div><div class="order-label">Комментарий:</div><div class="order-data">{{ order.comment }}</div></div>{% endif %}
+<div><div class="order-label">Статус:</div><div>{{ order.get_status_display }}</div></div>
+</div>
+
+                         </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    <tfoot>
+    <tr>
+        <td>&nbsp;</td>
+        <td colspan="5">&nbsp;</td>
+    </tr>
+    </tfoot>
+    </table>
+
+    <div class="order_body">
+{% if customer.first_name or customer.last_name %}
+    <div>
+        <div class="order-label">Покупатель:</div>
+        <div class="order-data">{{ customer.first_name }}&nbsp;{{ customer.last_name }}&nbsp;{{ customer.patronymic }}</div>
+    </div>
+{% endif %}
+{% if customer.phone %}
+    <div>
+        <div class="order-label">Телефон:</div>
+        <div class="order-data">{{ customer.phone }}</div>
+    </div>
+{% endif %}
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+                  {% block breadcrumbs %}
+                <li class="breadcrumb-item active">Заказ</li>
+                  {% endblock %}
+{% block content %}
+<h4 class="text-center">Оформление заказа</h4>
+
+<table class="table-product-list">
+  <thead>
+    <tr>
+      <th scope="col" colspan="2">Наименование</th>
+      <th scope="col">Цена</th>
+      <th scope="col">Кол-во</th>
+        <th scope="col">Общая цена</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in order.products.all %}
+        <tr>
+          <td scope="row">{{ item.product.title }}</td>
+          <td class="tm-product-thumbnails">{{ item.product.image_thumb }}</td>
+          <td>{{ item.product.price }} &#x20bd;</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.final_price }} &#x20bd;</td>
+        </tr>
+    {% endfor %}
+        <tr>
+        {% if order.gift %}
+            <td>{{ order.gift.title }} </td>
+            <td class="tm-product-thumbnails">{{ order.gift.image_thumb }}</td>
+            <td>{{ order.gift.price }} &#x20bd;</td>
+            <td></td>
+            <td>Подарок</td>
+       {% endif %}
+        </tr>
+        <tr class="td-delivery">
+            <td colspan="4">{{ order.get_delivery_type_display }}</td>
+            <td>{{ order.delivery_cost }} &#x20bd;</td>
+        </tr>
+  </tbody>
+  <tfoot>
+        <tr>
+          <td colspan="2"></td>
+          <td>Итого:</td>
+          <td>{{ order.total_products }}</td>
+          <td><strong>{{ order.total_price_gross }} &#x20bd;</strong></td>
+        </tr>
+  </tfoot>
+</table>
+{% if request.user.is_authenticated %}
+<div class="control-form">
+  <form action="{% url 'make_order' %}" method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-generic btn-block" value="Оформить заказ">
+  </form>
+</div>
+{% else %}
+<p>Для оформления заказа:
+  <a href="{% url 'login' %}">
+    <button class="btn btn-danger">Войти</button>
+  </a>
+  <br>Нет аккаунта? <a href="{% url 'registration' %}">Зарегистрироваться</a></p>
+{% endif %}
+
+{% endblock content %}
